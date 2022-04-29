@@ -1,8 +1,8 @@
-import { classToClass } from 'class-transformer';
 import { Request, Response } from 'express';
 import { container } from 'tsyringe';
 
 import { CreateUserService } from '@modules/users/services/CreateUserService';
+import { ListUsersService } from '@modules/users/services/ListUsersService';
 
 class UsersController {
   public async create(request: Request, response: Response): Promise<Response> {
@@ -12,7 +12,15 @@ class UsersController {
 
     const user = await createUser.execute({ email, password, name, phone });
 
-    return response.json(classToClass(user));
+    return response.json(user);
+  }
+
+  public async list(request: Request, response: Response): Promise<Response> {
+    const listUser = container.resolve(ListUsersService);
+
+    const users = await listUser.execute();
+
+    return response.json(users);
   }
 }
 

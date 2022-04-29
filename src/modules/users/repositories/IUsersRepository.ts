@@ -7,9 +7,9 @@ interface IUsersRepository {
 
   findByEmail(email: string): Promise<User | undefined>;
 
-  create(userData: ICreateUserDTO): Promise<User>;
+  findAll(): Promise<User[]>;
 
-  save(user: User): Promise<User>;
+  create(userData: ICreateUserDTO): Promise<User>;
 }
 
 export { IUsersRepository };
