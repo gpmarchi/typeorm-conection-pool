@@ -1,2 +1,0 @@
-import './MailTemplateProvider';
-import './MailProvider';
