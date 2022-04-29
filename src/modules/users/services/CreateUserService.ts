@@ -3,7 +3,6 @@ import { injectable, inject } from 'tsyringe';
 import { AppError } from '@shared/errors/AppError';
 
 import { User } from '../infra/typeorm/entities/User';
-import { IHashProvider } from '../providers/HashProvider/interfaces/IHashProvider';
 import { IUsersRepository } from '../repositories/IUsersRepository';
 
 interface IRequestDTO {
@@ -17,16 +16,11 @@ interface IRequestDTO {
 class CreateUserService {
   private usersRepository: IUsersRepository;
 
-  private hashProvider: IHashProvider;
-
   constructor(
     @inject('UsersRepository')
     usersRepository: IUsersRepository,
-    @inject('HashProvider')
-    hashProvider: IHashProvider,
   ) {
     this.usersRepository = usersRepository;
-    this.hashProvider = hashProvider;
   }
 
   public async execute({
@@ -41,11 +35,9 @@ class CreateUserService {
       throw new AppError('User already registered.', 400);
     }
 
-    const hashedPassword = await this.hashProvider.generateHash(password);
-
     const user = this.usersRepository.create({
       email,
-      password: hashedPassword,
+      password,
       name,
       phone,
     });
